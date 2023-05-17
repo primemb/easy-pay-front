@@ -1,0 +1,6 @@
+.payment-input {
+  @apply rounded-md shadow-sm mt-1 block w-full border border-solid border-gray-400/40 outline-none px-4 py-1;
+}
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
