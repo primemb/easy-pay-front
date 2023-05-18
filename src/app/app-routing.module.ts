@@ -7,6 +7,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/payment/payment.module').then((m) => m.PaymentModule),
   },
+  {
+    path: 'payments/verify/:gateway',
+    loadChildren: () =>
+      import('./pages/verify/verify.module').then((m) => m.VerifyModule),
+  },
 ];
 
 @NgModule({
