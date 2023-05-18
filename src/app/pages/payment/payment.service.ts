@@ -19,7 +19,7 @@ export class PaymentService {
     return await lastValueFrom(
       this.httpClient.post<IPaymentResponse>(`${environment.apiUrl}/payments`, {
         ...data,
-        backurl: `${environment.backurl}`,
+        backurl: `${environment.siteUrl}/payments/verify/${data.gateway}`,
       })
     );
   }

@@ -1,4 +1,4 @@
 export const environment = {
   apiUrl: 'http://localhost:3000',
-  backurl: 'http://localhost:3000/verify',
+  siteUrl: 'http://localhost:4200',
 };
