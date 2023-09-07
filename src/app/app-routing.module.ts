@@ -4,13 +4,15 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () =>
-      import('./pages/payment/payment.module').then((m) => m.PaymentModule),
+    loadComponent: () =>
+      import('./pages/payment/payment.component').then(
+        (m) => m.PaymentComponent
+      ),
   },
   {
     path: 'payments/verify/:gateway',
-    loadChildren: () =>
-      import('./pages/verify/verify.module').then((m) => m.VerifyModule),
+    loadComponent: () =>
+      import('./pages/verify/verify.component').then((m) => m.VerifyComponent),
   },
 ];
 

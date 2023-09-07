@@ -1,15 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PaymentService } from './payment.service';
-import { NgForm } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { IPaymentRequest } from './payment.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
+  imports: [FormsModule, CommonModule],
+  providers: [PaymentService],
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
 })
 export class PaymentComponent implements OnInit {
-  @ViewChild('paymentForm') signupForm: NgForm;
+  @ViewChild('paymentForm') paymentForm: NgForm;
   loading = false;
   error = false;
   gateways: string[] = [];
@@ -26,7 +30,7 @@ export class PaymentComponent implements OnInit {
   }
 
   async onSubmit() {
-    const data = this.signupForm.value;
+    const data = this.paymentForm.value;
     this.loading = true;
     const payload: Omit<IPaymentRequest, 'backurl'> = {
       amount: data.amount,
@@ -35,6 +39,10 @@ export class PaymentComponent implements OnInit {
       gateway: data.gateway,
       mobile: data.phone,
     };
-    await this.paymentService.pay(payload);
+    try {
+      await this.paymentService.pay(payload);
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
