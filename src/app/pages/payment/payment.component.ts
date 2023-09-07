@@ -40,7 +40,8 @@ export class PaymentComponent implements OnInit {
       mobile: data.phone,
     };
     try {
-      await this.paymentService.pay(payload);
+      const response = await this.paymentService.pay(payload);
+      window.location.href = response.paymentUrl;
     } catch (e) {
       console.log(e);
     }

@@ -1,5 +1,16 @@
 export interface IPaymentResponse {
-  code: string;
+  _id: string;
+  amount: number;
+  currency: string;
+  description: string;
+  status: string;
+  gateway: string;
+  gatewayId: string;
+  paymentUrl: string;
+  backurl: string;
+  uniqueId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IPaymentRequest {
