@@ -14,6 +14,11 @@ const routes: Routes = [
     loadComponent: () =>
       import('./pages/verify/verify.component').then((m) => m.VerifyComponent),
   },
+  {
+    path: 'auth',
+    loadComponent: () =>
+      import('./pages/auth/auth.component').then((m) => m.AuthComponent),
+  },
 ];
 
 @NgModule({
