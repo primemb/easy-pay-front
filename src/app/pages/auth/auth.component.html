@@ -5,26 +5,40 @@
     class="min-w-[400px] bg-white p-4 rounded-md shadow-md flex flex-col gap-4"
   >
     <h4 class="text-center">ورود به پنل ادمین</h4>
-    <div class="flex justify-evenly">
-      <label for="">نام کاربری:</label>
-      <input
-        type="text"
-        class="bg-slate-200 rounded-md focus:outline-none px-2 py-1"
-        style="direction: ltr"
-      />
-    </div>
-    <div class="flex justify-evenly">
-      <label for="">کلمه عبور:</label>
-      <input
-        type="text"
-        class="bg-slate-200 rounded-md focus:outline-none px-2 py-1"
-        style="direction: ltr"
-      />
-    </div>
-    <button
-      class="inline-flex mt-6 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400"
+    <form
+      class="w-full flex flex-col gap-4"
+      (ngSubmit)="onLogin(authForm)"
+      #authForm="ngForm"
     >
-      ورود
-    </button>
+      <div class="flex justify-evenly">
+        <label for="">نام کاربری:</label>
+        <input
+          type="text"
+          class="bg-slate-200 rounded-md focus:outline-none px-2 py-1"
+          style="direction: ltr"
+          name="username"
+          ngModel
+          required
+        />
+      </div>
+      <div class="flex justify-evenly">
+        <label for="">کلمه عبور:</label>
+        <input
+          type="text"
+          class="bg-slate-200 rounded-md focus:outline-none px-2 py-1"
+          style="direction: ltr"
+          name="password"
+          ngModel
+          required
+        />
+      </div>
+      <p *ngIf="error" class="text-rose-500">{{ error }}</p>
+      <button
+        type="submit"
+        class="inline-flex mt-6 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400"
+      >
+        ورود
+      </button>
+    </form>
   </div>
 </div>

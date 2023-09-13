@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { authGuard } from './pages/auth/auth.guard';
 
 const routes: Routes = [
   {
@@ -8,6 +9,7 @@ const routes: Routes = [
       import('./pages/payment/payment.component').then(
         (m) => m.PaymentComponent
       ),
+    pathMatch: 'full',
   },
   {
     path: 'payments/verify/:gateway',
@@ -18,6 +20,12 @@ const routes: Routes = [
     path: 'auth',
     loadComponent: () =>
       import('./pages/auth/auth.component').then((m) => m.AuthComponent),
+  },
+  {
+    path: 'admin',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/admin/admin.component').then((m) => m.AdminComponent),
   },
 ];
 
