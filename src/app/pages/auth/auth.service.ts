@@ -118,8 +118,7 @@ export class AuthService {
     return throwError(() => new Error(message));
   }
 
-  public isLoggedIn() {
-    const currentUser = this.user.value;
+  public isLoggedIn(currentUser: User | null) {
     if (!currentUser) {
       return false;
     }

@@ -26,7 +26,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.authService.autoLogin();
 
     this.subscription = this.authService.user.subscribe((user) => {
-      if (user) {
+      if (this.authService.isLoggedIn(user)) {
         this.router.navigate(['/admin']);
       }
     });

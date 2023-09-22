@@ -17,7 +17,7 @@ export const authGuard: CanActivateFn = (
   return authService.user.pipe(
     take(1),
     map((user) => {
-      const isAuth = authService.isLoggedIn();
+      const isAuth = authService.isLoggedIn(user);
       if (isAuth) {
         return true;
       }
