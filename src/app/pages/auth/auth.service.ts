@@ -101,6 +101,7 @@ export class AuthService {
         refreshTokenExpiresIn: user.refreshTokenExpirationDate.toISOString(),
       })
     );
+    this.autoLogout(response.tokeExpiresIn * 1000);
   }
 
   private handleError(error: HttpErrorResponse) {
