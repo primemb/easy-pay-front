@@ -1,1 +1,21 @@
-<p>admin works!</p>
+<div class="w-full h-screen bg-slate-200 flex">
+  <aside class="w-64 h-full bg-white">
+    <!-- Sidebar Header -->
+    <div class="p-4 text-xl font-semibold">پنل ادمین</div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="space-y-2 flex flex-col">
+      <a
+        [routerLink]="menu.link"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        *ngFor="let menu of sideBarMenu"
+        class="block p-4 hover:bg-gray-200"
+        >{{ menu.title }}</a
+      >
+    </nav>
+  </aside>
+  <main class="p-4 w-full h-full">
+    <router-outlet></router-outlet>
+  </main>
+</div>

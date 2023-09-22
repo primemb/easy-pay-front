@@ -26,6 +26,15 @@ const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/admin/admin.component').then((m) => m.AdminComponent),
+    children: [
+      {
+        path: 'payments',
+        loadComponent: () =>
+          import('./pages/admin/payments/payments.component').then(
+            (m) => m.PaymentsComponent
+          ),
+      },
+    ],
   },
 ];
 
