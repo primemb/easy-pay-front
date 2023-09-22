@@ -3,6 +3,7 @@ import { BehaviorSubject, throwError, catchError, tap, take } from 'rxjs';
 import { User } from './user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment.development';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
   accessToken: string;
@@ -13,9 +14,13 @@ export interface AuthResponseData {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private tokenExpirationTimer: NodeJS.Timeout | null = null;
   user = new BehaviorSubject<User | null>(null);
 
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(
+    private readonly httpClient: HttpClient,
+    private readonly router: Router
+  ) {}
 
   login(username: string, password: string) {
     return this.httpClient
@@ -24,7 +29,6 @@ export class AuthService {
         password,
       })
       .pipe(
-        take(1),
         catchError(this.handleError),
         tap({
           next: (response: AuthResponseData) => {
@@ -34,8 +38,46 @@ export class AuthService {
       );
   }
 
+  autoLogin() {
+    const storageData = localStorage.getItem('userData');
+    if (!storageData) return;
+    const userData: {
+      accessToken: string;
+      refreshToken: string;
+      tokeExpiresIn: string;
+      refreshTokenExpiresIn: string;
+    } = JSON.parse(storageData);
+    const loadedUser = new User(
+      userData.accessToken,
+      userData.refreshToken,
+      new Date(userData.tokeExpiresIn),
+      new Date(userData.refreshTokenExpiresIn)
+    );
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+      const expirationDuration =
+        loadedUser.tokenExpirationDate.getTime() - new Date().getTime();
+      this.autoLogout(expirationDuration);
+    }
+  }
+
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
+  }
+
+  logout() {
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = null;
+    }
+    this.user.next(null);
+    localStorage.removeItem('userData');
+    this.router.navigate(['/auth']);
+  }
+
   private handleAuthentication(response: AuthResponseData) {
-    console.log(response);
     const expirationDate = new Date(
       new Date().getTime() + response.tokeExpiresIn * 1000
     );
@@ -49,6 +91,16 @@ export class AuthService {
       refreshTokenExpirationDate
     );
     this.user.next(user);
+
+    localStorage.setItem(
+      'userData',
+      JSON.stringify({
+        accessToken: user.token,
+        refreshToken: user.refreshToken,
+        tokeExpiresIn: user.tokenExpirationDate.toISOString(),
+        refreshTokenExpiresIn: user.refreshTokenExpirationDate.toISOString(),
+      })
+    );
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -63,5 +115,24 @@ export class AuthService {
     }
     // Return an observable with a user-facing error message.
     return throwError(() => new Error(message));
+  }
+
+  public isLoggedIn() {
+    const currentUser = this.user.value;
+    if (!currentUser) {
+      return false;
+    }
+    if (
+      !currentUser.tokenExpirationDate ||
+      new Date() > currentUser.tokenExpirationDate
+    ) {
+      if (
+        !currentUser.refreshTokenExpirationDate ||
+        new Date() > currentUser.refreshTokenExpirationDate
+      ) {
+        return false;
+      }
+    }
+    return !!currentUser.token;
   }
 }

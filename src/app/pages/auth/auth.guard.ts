@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { AuthService } from './auth.service';
-import { map, take } from 'rxjs';
+import { async, map, take } from 'rxjs';
 
 export const authGuard: CanActivateFn = (
   next: ActivatedRouteSnapshot,
@@ -17,8 +17,7 @@ export const authGuard: CanActivateFn = (
   return authService.user.pipe(
     take(1),
     map((user) => {
-      const isAuth = !!user;
-      console.log({ isAuth });
+      const isAuth = authService.isLoggedIn();
       if (isAuth) {
         return true;
       }

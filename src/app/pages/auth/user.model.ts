@@ -7,9 +7,18 @@ export class User {
   ) {}
 
   get token() {
-    if (!this._tokenExpirationDate || new Date() > this._tokenExpirationDate) {
-      return null;
-    }
     return this._token;
+  }
+
+  get refreshToken() {
+    return this._refreshToken;
+  }
+
+  get tokenExpirationDate() {
+    return this._tokenExpirationDate;
+  }
+
+  get refreshTokenExpirationDate() {
+    return this._refreshTokenExpirationDate;
   }
 }
